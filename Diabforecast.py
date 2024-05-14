@@ -7,7 +7,7 @@ from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
 import streamlit as st
 from sklearn.linear_model import LogisticRegression
 
-data = pd.read_csv(r'C:\Users\User\Downloads\archive\diabetes.csv')
+data = pd.read_csv(r'D:\New folder (2)\diabetes.csv')
 
 
 nonzero = ['Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI']
@@ -17,7 +17,7 @@ for x in nonzero:
     data[x] = data[x].replace(np.NaN, mean)
 
 
-st.image(r"C:\Users\User\Downloads\project.jpg", width=700)
+st.image(r"D:\New folder (2)\project.jpg", width=700)
 st.markdown('<h1 style="text-align: center; font-size: 3.5rem;color:blue;">DiabForecast</h1>', unsafe_allow_html=True)
 st.markdown("<h3 style='text-align: center;'>Predict Diabetes</h3>", unsafe_allow_html=True)
 st.write("\n")
