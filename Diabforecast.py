@@ -243,6 +243,6 @@ dict_to_pdf(user_report1, pdf_file)
 with open(pdf_file, "rb") as f:
     pdf_data = f.read()
 
-st.subheader('Download Your Report Here')
+st.subheader('Download Report Here')
 if st.download_button(label="Click to Download", data=pdf_data, file_name=pdf_file, mime="application/pdf"):
     st.write("PDF file downloaded successfully.")
