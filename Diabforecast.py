@@ -94,16 +94,28 @@ def knn(X_train, y_train, X_test, y_test, userdata_scaled):
 
     accuracy = accuracy_score(y_test, y_pred) * 100
     st.subheader('Accuracy of K-NN Model:')
-    st.write(f"{accuracy:.2f}%")
+    container=st.container(border=True)
+    container.write(f"{accuracy:.2f}%")
 
     f1score = f1_score(y_test, y_pred)
-    st.subheader('F1 Score of K-NN Model:')
-    st.write(f"{f1score:.2f}")
+    st.subheader('f1 Score of K-NN Model:')
+    container=st.container(border=True)
+    container.write(f"{f1score:.2f}")
 
     user_result = classifier.predict(userdata_scaled)
-    st.header('Your Report:')
-    output = 'You have no Diabetes' if user_result[0] == 0 else 'You have Diabetes'
-    st.write(output)
+    st.subheader('Result:')
+    output ='  '  
+    if user_result[0] == 0:
+        output='Negative'
+        container=st.container(border=True)
+        container.write(output)
+    else:
+        output='Possitive'
+        container=st.container(border=True)
+        container.write(output)
+  
+
+
 
 # Logistic Regression model
 def lgr(X_train, y_train, X_test, y_test, userdata_scaled):
@@ -113,17 +125,26 @@ def lgr(X_train, y_train, X_test, y_test, userdata_scaled):
 
     accuracy = accuracy_score(y_test, y_pred) * 100
     st.subheader('Accuracy of Logistic Regression Model:')
-    st.write(f"{accuracy:.2f}%")
+    container=st.container(border=True)
+    container.write(f"{accuracy:.2f}%")
 
     f1score = f1_score(y_test, y_pred)
-    st.subheader('F1 Score of Logistic Regression Model:')
-    st.write(f"{f1score:.2f}")
+    st.subheader('f1 Score of Logistic Regression Model:')
+    container=st.container(border=True)
+    container.write(f"{f1score:.2f}")
 
     user_result = classifier.predict(userdata_scaled)
-    st.header('Your Report:')
-    output = 'You have no Diabetes' if user_result[0] == 0 else 'You have Diabetes'
-    st.write(output)
-
+    st.subheader('Result:')
+    output ='  '  
+    if user_result[0] == 0:
+        output='Negative'
+        container=st.container(border=True)
+        container.write(output)
+    else:
+        output='Possitive'
+        container=st.container(border=True)
+        container.write(output)
+  
 
 
 
