@@ -24,11 +24,11 @@ st.markdown('<h1 style="text-align: center; font-size: 3.5rem;color:blue;">DiabF
 st.markdown("<h3 style='text-align: center;'>Predict Diabetes</h3>", unsafe_allow_html=True)
 st.write("\n")
 
-st.header('Dataset Info:')
+st.header('Dataset Info')
 st.write(data.describe())
 
 
-st.header("Visualization of Dataset:")
+st.header("Visualization of Dataset")
 st.bar_chart(data)
 
 
@@ -113,17 +113,17 @@ def knn(X_train, y_train, X_test, y_test, userdata_scaled):
     cm = confusion_matrix(y_test, y_pred)
 
     accuracy = accuracy_score(y_test, y_pred) * 100
-    st.subheader('Accuracy of K-NN Model:')
+    st.subheader('Accuracy of K-NN Model')
     container=st.container(border=True)
     container.write(f"{accuracy:.2f}%")
 
     f1score = f1_score(y_test, y_pred)
-    st.subheader('f1 Score of K-NN Model:')
+    st.subheader('f1 Score of K-NN Model')
     container=st.container(border=True)
     container.write(f"{f1score:.2f}")
 
     user_result = classifier.predict(userdata_scaled)
-    st.subheader('Result:')
+    st.subheader('Result')
     output ='  '  
     if user_result[0] == 0:
         output='Negative'
@@ -144,17 +144,17 @@ def lgr(X_train, y_train, X_test, y_test, userdata_scaled):
     y_pred = classifier.predict(X_test)
 
     accuracy = accuracy_score(y_test, y_pred) * 100
-    st.subheader('Accuracy of Logistic Regression Model:')
+    st.subheader('Accuracy of Logistic Regression Model')
     container=st.container(border=True)
     container.write(f"{accuracy:.2f}%")
 
     f1score = f1_score(y_test, y_pred)
-    st.subheader('f1 Score of Logistic Regression Model:')
+    st.subheader('f1 Score of Logistic Regression Model')
     container=st.container(border=True)
     container.write(f"{f1score:.2f}")
 
     user_result = classifier.predict(userdata_scaled)
-    st.subheader('Result:')
+    st.subheader('Result')
     output ='  '  
     if user_result[0] == 0:
         output='Negative'
