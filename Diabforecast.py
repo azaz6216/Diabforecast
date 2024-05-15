@@ -6,6 +6,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
 import streamlit as st
 from sklearn.linear_model import LogisticRegression
+from fpdf import FPDF
+import base64
 
 data = pd.read_csv(r'https://raw.githubusercontent.com/azaz6216/Diabforecast/main/diabetes.csv')
 
@@ -40,30 +42,49 @@ X_train = sc_X.fit_transform(X_train)
 X_test = sc_X.transform(X_test)
 
 st.sidebar.title('Choose Model')
-model = st.sidebar.selectbox(label='Select a Model', options=['K-NN', 'LGR'])
+model = st.sidebar.selectbox(label='Model', options=['K-NN', 'LGR'])
 
-def user_report():
-    st.sidebar.title('Input all information')
-    pregnancies = st.sidebar.number_input('Pregnancies', step=1)
-    glucose = st.sidebar.number_input('Glucose', step=1)
-    bp = st.sidebar.number_input('Blood Pressure', step=1)
-    skinthickness = st.sidebar.number_input('Skin Thickness', step=1)
-    insulin = st.sidebar.number_input('Insulin', step=1)
-    bmi = st.sidebar.number_input('BMI')
-    dpf = st.sidebar.number_input('Diabetics Pedigree Function')
-    age = st.sidebar.number_input('Age', step=1)
 
-    st.sidebar.subheader("Input Values:")
-    st.sidebar.text(f"Pregnancies: {pregnancies}")
-    st.sidebar.text(f"Glucose: {glucose}")
-    st.sidebar.text(f"Blood Pressure: {bp}")
-    st.sidebar.text(f"Skin Thickness: {skinthickness}")
-    st.sidebar.text(f"Insulin: {insulin}")
-    st.sidebar.text(f"BMI: {bmi}")
-    st.sidebar.text(f"Diabetics Pedigree Function: {dpf}")
-    st.sidebar.text(f"Age: {age}")
 
-    user_data = {
+
+st.sidebar.title('Input all information')
+name=st.sidebar.text_input('Name')
+gender= st.sidebar.selectbox(label='Gender', options=['Male', 'Female','Others'])
+age = st.sidebar.number_input('Age', step=1)
+pregnancies = st.sidebar.number_input('Pregnancies', step=1)
+glucose = st.sidebar.number_input('Glucose', step=1)
+bp = st.sidebar.number_input('Blood Pressure', step=1)
+skinthickness = st.sidebar.number_input('Skin Thickness', step=1)
+insulin = st.sidebar.number_input('Insulin', step=1)
+bmi = st.sidebar.number_input('BMI')
+dpf = st.sidebar.number_input('Diabetics Pedigree Function')
+
+
+
+
+st.sidebar.subheader("Input Values:")
+st.sidebar.text(f"Name:{name}")
+st.sidebar.text(f"Gender:{gender}")
+st.sidebar.text(f"Age: {age}")
+st.sidebar.text(f"Pregnancies: {pregnancies}")
+st.sidebar.text(f"Glucose: {glucose}")
+st.sidebar.text(f"Blood Pressure: {bp}")
+st.sidebar.text(f"Skin Thickness: {skinthickness}")
+st.sidebar.text(f"Insulin: {insulin}")
+st.sidebar.text(f"BMI: {bmi}")
+st.sidebar.text(f"Diabetics Pedigree Function: {dpf}")
+
+
+
+
+
+
+
+
+
+
+
+user_data = {
         'pregnancies': pregnancies,
         'glucose': glucose,  
         'bp': bp,
@@ -74,9 +95,8 @@ def user_report():
         'age': age
     }
 
-    return user_data
     
-user_data=user_report()
+
 values_list = list(user_data.values())
 user_data_array = np.array([values_list])
 userdata_scaled = sc_X.transform(user_data_array)
@@ -153,3 +173,76 @@ if model == 'K-NN':
 
 else:
     lgr(X_train, y_train, X_test, y_test, userdata_scaled)
+
+
+
+def knnreport(X_train, y_train, userdata_scaled):
+    classifier = KNeighborsClassifier(n_neighbors=11, p=2, metric='euclidean')
+    classifier.fit(X_train, y_train)
+    prediction= classifier.predict(userdata_scaled)
+
+    output1  ='  '  
+    if prediction[0] == 0:
+        output1='Negative'
+    
+    else:
+        output1='Possitive'
+    return output1  
+
+
+def lgrreport(X_train, y_train, userdata_scaled):
+    classifier = LogisticRegression()
+    classifier.fit(X_train, y_train)
+    prediction1= classifier.predict(userdata_scaled)
+
+    output1  ='  '  
+    if prediction1[0] == 0:
+        output1='Negative'
+    
+    else:
+        output1='Possitive'
+    return output1 
+
+x=knnreport(X_train, y_train, userdata_scaled)
+y=lgrreport(X_train, y_train, userdata_scaled)
+
+
+user_report1 = {
+        'Diabforecast':"Report",
+        'Name':name,
+        'Gender':gender,
+        'Age': age,
+        'Pregnancies': pregnancies,
+        'Glucose': glucose,  
+        'Bp': bp,
+        'Skinthickness': skinthickness,
+        'Insulin': insulin,
+        'BMI': bmi,
+        'Dpf': dpf,
+        'Result(K-NN)':x,
+        'Result(LGR)':y
+    }
+
+
+
+# Function to convert dictionary to PDF
+def dict_to_pdf(data, pdf_file):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+
+    for key, value in data.items():
+        pdf.cell(200, 10, txt=f"{key}: {value}", ln=True, align='L')
+
+    pdf.output(pdf_file)
+
+# Create PDF and download link
+pdf_file = "user_report.pdf"
+dict_to_pdf(user_report1, pdf_file)
+
+with open(pdf_file, "rb") as f:
+    pdf_data = f.read()
+
+st.subheader('Download Your Report Here')
+if st.download_button(label="Click to Download", data=pdf_data, file_name=pdf_file, mime="application/pdf"):
+    st.write("PDF file downloaded successfully.")
