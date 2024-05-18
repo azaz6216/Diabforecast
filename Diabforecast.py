@@ -225,7 +225,7 @@ user_report1 = {
 
 
 
-# Function to convert dictionary to PDF
+
 def dict_to_pdf(data, pdf_file):
     pdf = FPDF()
     pdf.add_page()
@@ -236,8 +236,7 @@ def dict_to_pdf(data, pdf_file):
 
     pdf.output(pdf_file)
 
-# Create PDF and download link
-pdf_file = "user_report.pdf"
+pdf_file = f"{name}.pdf"
 dict_to_pdf(user_report1, pdf_file)
 
 with open(pdf_file, "rb") as f:
